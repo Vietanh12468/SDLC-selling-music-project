@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Company Form - Laravel 9 CRUD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('css/styles.css')); ?>">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Tune Source</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:8000/Home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:8000/explore">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:8000/Search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <?php if(auth()->check()): ?>
+                    <li class="nav-item">
+                        <span class="nav-link"><?php echo e(auth()->user()->name); ?> - $<?php echo e(auth()->user()->money); ?></span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="<?php echo e(route('logout.Func')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="handleLoginClick()">Login</a>
+                    </li>
+                    
+                    <script>
+                        function handleLoginClick() {
+                            // Get the modal background element
+                            const modalBackground = document.querySelector(".modal-background");
+                            // Toggle the "hidden" class on the modal background
+                            modalBackground.classList.toggle("hidden");
+                        }
+                    </script>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="modal-background hidden">
+        <form action="<?php echo e(route('login.Func')); ?>" id="login" method="POST" enctype="multipart/form-data" class="modal-content">
+            <button class="close-button" onclick="handleLoginClick()">X</button>
+            <?php echo csrf_field(); ?>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <?php if($errors->has('email')): ?>
+                    <span class="text-danger"><?php echo e($errors->first('email')); ?></span>
+                <?php endif; ?>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Password">
+                <?php if($errors->has('password')): ?>
+                    <span class="text-danger"><?php echo e($errors->first('password')); ?></span>
+                <?php endif; ?>
+            </div>
+            <div class="form-button text-center">
+                <button type="submit" class="btn btn-primary mx-3 mx-md-4">Log in</button>
+                <a class="btn btn-success mx-3 mx-md-4" href="<?php echo e(route('Users.create')); ?>"> Register</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Your playlist
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Recent download
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://127.0.0.1:8000/purchase">
+                                Redeem code
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://127.0.0.1:8000/purchase">
+                                Upgrade VIP
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                About us
+                            </a>
+                        </li>
+
+                        <?php if(auth()->check()): ?>
+                            <?php if(auth()->user()->type == 'producer'): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <span data-feather="users"></span>
+                                        producer
+                                    </a>
+                                </li>
+                            <?php elseif(auth()->user()->type == 'admin'): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/UsersManager">
+                                        <span data-feather="users"></span>
+                                        Accounts Manager
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/SongsManager">
+                                        <span data-feather="users"></span>
+                                        Songs Manager
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="SongsManager/CategorysManager">
+                                        <span data-feather="users"></span>
+                                        Categories Manager
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </nav><?php /**PATH C:\Users\Viet Anh\My-Web\resources\views/Users/navbar.blade.php ENDPATH**/ ?>
